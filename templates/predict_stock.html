@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Stock Prediction Form</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> <!-- If you're using Bootstrap -->
+    <style>
+        :root {
+            --sidebar-bg-color: #242526;
+            --sidebar-text-color: #ffffff;
+            --main-bg-color: #f0f2f5;
+            --content-bg-color: #ffffff;
+            --btn-primary-bg-color: #007bff;
+            --btn-primary-hover-bg-color: #0056b3;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--main-bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            background-color: var(--sidebar-bg-color);
+            color: var(--sidebar-text-color);
+            height: 100vh;
+            width: 250px;
+            padding: 20px 10px;
+            position: fixed;
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .logo img {
+            max-height: 60px;
+        }
+
+        .sidebar .nav-link {
+            color: var(--sidebar-text-color);
+            margin: 10px 0;
+            display: block;
+        }
+
+        .sidebar .nav-link:hover {
+            color: var(--content-bg-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 20px;
+            background-color: var(--main-bg-color);
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background-color: var(--content-bg-color);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: var(--btn-primary-bg-color);
+            color: #ffffff;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: var(--btn-primary-hover-bg-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="{% static 'assets/img/MY-LOGO.png' %}" alt="Stock Prediction">
+            <h3>Stock Prediction</h3>
+        </div>
+        <nav>
+            <a href="{% url 'index' %}" class="nav-link">Technical</a>
+            <a href="{% url 'feedback_form' %}" class="nav-link">Feedback</a>
+            <a href="{% url 'fundamental' %}" class="nav-link">Fundamental</a>
+            <a href="{% url 'predict_stock' %}" class="nav-link">Prediction</a>
+        </nav>
+    </aside>
+
+    <div class="main-content">
+        <div class="form-container">
+            <h1>Enter Stock Ticker and Number of Days for Prediction</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Predict</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

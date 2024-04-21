@@ -1,0 +1,275 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fundamental Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 0;
+        }
+/* Sidebar Styling */
+.sidebar {
+    background-color: #242526;
+    color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    padding: 20px;
+    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.sidebar.collapsed {
+    width: 80px;
+}
+
+/* Logo & Navigation Links */
+.logo,
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo img {
+    max-width: 100%;
+    height: auto;
+}
+.logo span,
+.nav-link {
+    font-weight: 600;
+    font-size: 18px;
+    color: #fff;
+}
+.nav-link:hover {
+    color: #e4e6eb;
+    text-decoration: none;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    background-color: #3a3b3c;
+    border-radius: 30px;
+    padding: 5px 10px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+.search-form input {
+    border: none;
+    background: transparent;
+    color: #bdbdbd;
+    margin-right: 10px;
+    outline: none;
+}
+.search-form button {
+    background: none;
+    border: none;
+    color: #e4e6eb;
+    cursor: pointer;
+}
+
+.container{
+
+    margin-left: 300px;
+}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            min-width: 400px;
+            border-radius: 5px 5px 0 0;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            font-weight: bold;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+        }
+        
+        form {
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"], button {
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        button {
+            background-color: #009879;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #00795f;
+        }
+    </style>
+</head>
+<body>
+
+<aside id="sidebar" class="sidebar d-flex flex-column align-items-center justify-content-between">
+  <div class="sidebar-top">
+      <a href="#" class="logo d-flex align-items-center">
+          <img src="{% static 'assets/img/MY-LOGO.png' %}" alt="" style="height: 60px;">
+          <span>Stock Prediction</span>
+      </a>
+      <form class="search-form d-flex align-items-center my-3" method="get" action="{% url 'search' %}">
+          <input type="text" name="query" placeholder="Search for a ticker..." title="Enter search keyword">
+          <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+      <nav>
+          <ul class="nav flex-column">
+              <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Technical</a></li>
+              <li class="nav-item"><a href="{% url 'feedback_form' %}" class="nav-link">Feedback</a></li>
+              <li class="nav-item"><a href="{% url 'fundamental' %}" class="nav-link">Fundamental</a></li>
+              <li class="nav-item"><a href="{% url 'predict_stock' %}" class="nav-link">Prediction</a></li>
+          </ul>
+      </nav>
+  </div>
+  <div class="sidebar-bottom">
+      <a class="nav-profile d-flex align-items-center" href="#" data-bs-toggle="dropdown">
+          <img src="{% static 'assets/img/user.png' %}" alt="Profile" class="rounded-circle" style="height: 40px;">
+          <span>{{ request.user }}</span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-item">
+              <a class="d-flex align-items-center" href="{% url 'logout' %}">
+                  <i class="bi bi-box-arrow-right"></i>
+                  <span>Sign Out</span>
+              </a>
+          </li>
+      </ul>
+  </div>
+</aside>
+ 
+
+<div class="container">    <form action="{% url 'fundamental' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="ticker" placeholder="Enter Stock Ticker" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h1>Fundamental Data for {{ ticker }}</h1>
+    <table>
+
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Market Cap</td>
+                <td>{{ fundamentals.market_cap }}</td>
+            </tr>
+            <tr>
+                <td>PE Ratio</td>
+                <td>{{ fundamentals.pe_ratio }}</td>
+            </tr>
+            <tr>
+                <td>Dividend Yield</td>
+                <td>{{ fundamentals.dividend_yield }}</td>
+            </tr>
+            <tr>
+                <td>Sector</td>
+                <td>{{ fundamentals.sector }}</td>
+            </tr>
+            <tr>
+                <td>Earnings Growth</td>
+                <td>{{ fundamentals.earnings_growth }}</td>
+            </tr>
+            <tr>
+                <td>Book Value</td>
+                <td>{{ fundamentals.book_value }}</td>
+            </tr>
+            <tr>
+                <td>Profit Margins</td>
+                <td>{{ fundamentals.profit_margins }}</td>
+            </tr>
+            <tr>
+                <td>Return on Equity</td>
+                <td>{{ fundamentals.return_on_equity }}</td>
+            </tr>
+            <tr>
+                <td>Revenue Growth</td>
+                <td>{{ fundamentals.revenue_growth }}</td>
+            </tr>
+            <tr>
+                <td>Operating Margins</td>
+                <td>{{ fundamentals.operating_margins }}</td>
+            </tr>
+            <tr>
+                <td>Enterprise to Revenue</td>
+                <td>{{ fundamentals.enterprise_to_revenue }}</td>
+            </tr>
+            <tr>
+                <td>Enterprise to EBITDA</td>
+                <td>{{ fundamentals.enterprise_to_ebitda }}</td>
+            </tr>
+            <tr>
+                <td>52 Week Change</td>
+                <td>{{ fundamentals.52_week_change }}</td>
+            </tr>
+            <tr>
+                <td>Current Ratio</td>
+                <td>{{ fundamentals.current_ratio }}</td>
+            </tr>
+            <tr>
+                <td>Debt to Equity</td>
+                <td>{{ fundamentals.debt_to_equity }}</td>
+            </tr>
+            <tr>
+                <td>Forward EPS</td>
+                <td>{{ fundamentals.forward_eps }}</td>
+            </tr>
+            <tr>
+                <td>Forward PE</td>
+                <td>{{ fundamentals.forward_pe }}</td>
+            </tr>
+            <tr>
+                <td>Beta</td>
+                <td>{{ fundamentals.beta }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+</body>
+</html>
